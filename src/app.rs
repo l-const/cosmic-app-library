@@ -340,7 +340,7 @@ impl CosmicAppLibrary {
                 get_layer_surface(SctkLayerSurfaceSettings {
                     id: *WINDOW_ID,
                     keyboard_interactivity: KeyboardInteractivity::Exclusive,
-                    anchor: Anchor::all(),
+                    anchor: self.config.anchor_position.into(),
                     namespace: "app-library".into(),
                     size: Some((None, None)),
                     exclusive_zone: -1,
@@ -854,7 +854,7 @@ impl cosmic::Application for CosmicAppLibrary {
                     get_layer_surface(SctkLayerSurfaceSettings {
                         id: *NEW_GROUP_WINDOW_ID,
                         keyboard_interactivity: KeyboardInteractivity::Exclusive,
-                        anchor: Anchor::empty(),
+                        anchor: self.config.anchor_position.into(),
                         namespace: "dialog".into(),
                         size: None,
                         ..Default::default()

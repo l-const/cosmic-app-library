@@ -3,6 +3,7 @@ use std::{sync::Arc, vec};
 use cosmic::{
     cosmic_config::{self, CosmicConfigEntry, cosmic_config_derive::CosmicConfigEntry},
     desktop::DesktopEntryData,
+    iced::platform_specific::shell::commands::layer_surface::Anchor,
 };
 use serde::{Deserialize, Serialize};
 use std::sync::LazyLock;
@@ -167,9 +168,34 @@ impl AppGroup {
     }
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum AnchorPosition {
+    Top,
+    Center,
+    Bottom,
+}
+
+impl Default for AnchorPosition {
+    fn default() -> Self {
+        AnchorPosition::Top
+    }
+}
+
+impl From<AnchorPosition> for Anchor {
+    fn from(pos: AnchorPosition) -> Self {
+        match pos {
+            AnchorPosition::Top => Anchor::TOP,
+            AnchorPosition::Center => Anchor::empty(),
+            AnchorPosition::Bottom => Anchor::BOTTOM,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, CosmicConfigEntry)]
 pub struct AppLibraryConfig {
     pub(crate) groups: Vec<AppGroup>,
+    pub(crate) anchor_position: AnchorPosition,
 }
 
 impl AppLibraryConfig {
@@ -347,6 +373,7 @@ impl Default for AppLibraryConfig {
                     },
                 },
             ],
+            anchor_position: Default::default(),
         }
     }
 }
